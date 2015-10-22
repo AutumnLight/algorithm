@@ -49,16 +49,26 @@ void partition(T *arr, int len, Pred pred)
 	}
 }
 
+
 template<typename T>
 int partition2(T *arr, int len)
 {
 	int mid_ind = mymiddle(arr, 0, len / 2, len - 1);
+	// 主元放在最后的位置上，若主元在其他位置上会产生错误
+	swap(arr[mid_ind], arr[len - 1]); 
 
 	int i, j;
 	for (i = -1, j = 0; j < len; ++j)
-		if (arr[j] < arr[mid_ind]) arr[++i] = arr[j];
+		if (arr[j] < arr[mid_ind]) swap(arr[++i], arr[j]);
 	swap(arr[++i], arr[mid_ind]);
 	return i;
+}
+
+template<typename T, typename Pred>
+void partition2(T *arr, int len, Pred pred)
+{
+	for (int i = -1, j = 0; j < len; j++)
+		if (pred(arr[j])) swap(arr[++i], arr[j]);
 }
 
 }
