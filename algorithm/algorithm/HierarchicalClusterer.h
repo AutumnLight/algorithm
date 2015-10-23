@@ -68,8 +68,6 @@ namespace ml
 			distanceMatrix[i][i] = 0;
 			for (j = i + 1; j < dataLen; ++j)
 			{
-				vector<int> t = (*data)[i];
-				vector<int> t2 = (*data)[j];
 				distanceMatrix[i][j] = d((*data)[i], (*data)[j]);
 				distanceMatrix[j][i] = distanceMatrix[i][j];
 			}
@@ -138,13 +136,13 @@ namespace ml
 		// 把较少的集合合并到较大的集合中
 		if (x->size() < y->size())
 		{
-			x->insert(y->begin(), y->end());
-			classRes.erase(y);
+			y->insert(x->begin(), x->end());
+			classRes.erase(x);
 		}
 		else
 		{
-			y->insert(x->begin(), x->end());
-			classRes.erase(x);
+			x->insert(y->begin(), y->end());
+			classRes.erase(y);
 		}
 	}
 }
