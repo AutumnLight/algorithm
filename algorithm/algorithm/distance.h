@@ -53,11 +53,11 @@ namespace ml { // ml为machine learning的缩写
 		for (i = 0; i <= len1; ++i)
 			distanceMatrix[i] = new int[len2 + 1];
 
-		// 第一行-->初始化为0
-		for (i = 0; i <= len2; ++i) distanceMatrix[0][i] = 0;
+		// 第一行
+		for (i = 0; i <= len2; ++i) distanceMatrix[0][i] = i;
 
-		// 第一列-->初始化为0
-		for (i = 1; i < len1; ++i) distanceMatrix[i][0] = 0;
+		// 第一列
+		for (i = 1; i <= len1; ++i) distanceMatrix[i][0] = i;
 
 		for (i = 1; i <= len1; ++i)
 			for (j = 1; j <= len2; ++j)
