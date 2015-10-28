@@ -24,12 +24,33 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="distance.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="HierarchicalClusterer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UnionSet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="comm_type.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="algorithm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="quick_sort.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="partition.h">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UnionSet.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
