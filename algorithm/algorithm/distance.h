@@ -21,7 +21,7 @@ namespace ml { // ml为machine learning的缩写
 	};
 
 	// 标准化后的距离，参见weka标准化距离度量
-	// 这里使用装饰着模式进行设计
+	// 这里使用装饰者模式进行设计
 	template <typename Container>
 	class NormalizedDistance : public Distance<Container>
 	{
@@ -46,36 +46,27 @@ namespace ml { // ml为machine learning的缩写
 		size_t len1 = c1.size();
 		size_t len2 = c2.size();
 		size_t maxLen = len1 > len2 ? len1 : len2;
-
-		int **distanceMatrix = new int*[len1 + 1];
-
 		size_t i, j;
-		for (i = 0; i <= len1; ++i)
-			distanceMatrix[i] = new int[len2 + 1];
+
+		vector<int> row0(len2 + 1, 0);
+		vector<int> row1(len2 + 1, 0);
 
 		// 第一行
-		for (i = 0; i <= len2; ++i) distanceMatrix[0][i] = i;
-
-		// 第一列
-		for (i = 1; i <= len1; ++i) distanceMatrix[i][0] = i;
+		for (i = 0; i <= len2; ++i) row0[i] = i;
 
 		for (i = 1; i <= len1; ++i)
+		{
+			row1[0] = i;
 			for (j = 1; j <= len2; ++j)
-				if (c1[i-1] == c2[j-1])
-					distanceMatrix[i][j] = distanceMatrix[i - 1][j - 1];
+				if (c1[i - 1] == c2[j - 1])
+					row1[j] = row0[j - 1];
 				else
-					distanceMatrix[i][j] = 1 +
-					min(distanceMatrix[i][j - 1],		// 插入
-						min(distanceMatrix[i - 1][j],		// 删除
-							distanceMatrix[i - 1][j - 1])); // 修改
+					row1[j] = 1 + min(row0[j - 1], min(row0[j], row1[j - 1]));
+			copy(row1.begin(), row1.end(), row0.begin());
+			
+		}
 
-		double dist = distanceMatrix[len1][len2];
-
-		for (i = 0; i < len1; ++i)
-			delete[] distanceMatrix[i];
-
-		delete[] distanceMatrix;
-		return dist;
+		return row0[len2];
 	}
 }
 
