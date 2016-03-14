@@ -12,24 +12,6 @@
 using namespace std;
 
 
-int test2(int n, int step) {
-	if (n == 0 && (step & 1)) return 0;
-	if (n == 0 && !(step & 1)) return 1;
-	if (n == 1 && (step & 1)) return 1;
-	if (n == 1 && !(step & 1)) return 0;
-	return test2(n - 1, step + 1) + test2(n - 2, step + 1);
-
-}
-
-void test1() {
-	int n, res;
-	cin >> n;
-	res = test2(n, 0);
-
-	cout << res;
-}
-
-
 int main()
 {
 	/*ml::EditDistance<vint> ed;
@@ -55,7 +37,6 @@ int main()
 		if ((i + 1) % 20 == 0) cout << endl;
 	}*/
 
-	test1();
 	system("PAUSE");
     return 0;
 }
