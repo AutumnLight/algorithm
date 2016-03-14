@@ -16,9 +16,11 @@ namespace ml
 	public:
 		typedef typename Container::size_type size_t;
 		typedef typename Container::value_type DistanceContainer;
+		enum linkage {SINGLE, COMPLETE, AVERAGE};
 
-		HierachicalClusterer(Distance<DistanceContainer> &d, int n = 1)
-			: d(d), classNum(n), data(nullptr) {};
+		HierachicalClusterer(Distance<DistanceContainer> &d, 
+			int n = 1, enum linkage linkage = AVERAGE)
+			: d(d), classNum(n), data(nullptr) , linkage(linkage) {};
 		void cluster();
 		void setData(const Container *data) 
 		{
@@ -35,7 +37,12 @@ namespace ml
 		}
 	private:
 		typedef typename list<set<int>>::iterator iterator;
+		// 两个类中所有数据的平均值作为两个类的距离
 		double averageDistance(iterator x, iterator y, vvd &distanceMatrix);
+		// 两个类中距离最小的两个数据的距离作为两个类的距离
+		double singleDistance(iterator x, iterator y, vvd &distanceMatrix);
+		// 两个类中距离最大的两个数据的距离作为两个类的距离
+		double completeDistance(iterator x, iterator y, vvd &distanceMatrix);
 		void unionSet(iterator x, iterator y); // 合并类别为i和j的两个类别
 	private:
 		Distance<DistanceContainer> &d;
@@ -44,6 +51,7 @@ namespace ml
 		vector<int> dataClass;		// 记录每个数据所属类别
 		int classNum;	// 聚类最后生成的类别数
 		int dataLen;
+		enum linkage linkage;
 	};
 
 
@@ -84,7 +92,19 @@ namespace ml
 				for (++it2; it2 != classRes.end(); ++it2)
 				{
 					// 计算类别为i和j的所有实例的平均距离
-					double d = averageDistance(it, it2, distanceMatrix);
+					double d;
+					switch (linkage)
+					{
+					case SINGLE:
+						d = singleDistance(it, it2, distanceMatrix);
+						break;
+					case COMPLETE:
+						d = completeDistance(it, it2, distanceMatrix);
+						break;
+					case AVERAGE:
+						d = averageDistance(it, it2, distanceMatrix);
+						break;
+					}
 					if (d < minDist) 
 					{
 						minDist = d;
@@ -128,6 +148,35 @@ namespace ml
 			for (auto it2 = c2.begin(); it2 != c2.end(); ++it2)
 				dist += distanceMatrix[*it1][*it2];
 		return dist / (len1 * len2);
+	}
+
+	template<typename Container>
+	double HierachicalClusterer<Container>::singleDistance(
+		iterator x, iterator y, vvd &distanceMatrix)
+	{
+		auto c1 = *x, c2 = *y;
+		double dist = numeric_limits<double>::max();
+		auto len1 = c1.size(), len2 = c2.size();
+
+		for (auto it1 = c1.begin(); it1 != c1.end(); ++it1)
+			for (auto it2 = c2.begin(); it2 != c2.end(); ++it2)
+				if (dist > distanceMatrix[*it1][*it2])
+					dist = distanceMatrix[*it1][*it2];
+		return dist;
+	}
+	template<typename Container>
+	double HierachicalClusterer<Container>::completeDistance(
+		iterator x, iterator y, vvd &distanceMatrix)
+	{
+		auto c1 = *x, c2 = *y;
+		double dist = numeric_limits<double>::min();
+		auto len1 = c1.size(), len2 = c2.size();
+
+		for (auto it1 = c1.begin(); it1 != c1.end(); ++it1)
+			for (auto it2 = c2.begin(); it2 != c2.end(); ++it2)
+				if (dist < distanceMatrix[*it1][*it2])
+					dist = distanceMatrix[*it1][*it2];
+		return dist;
 	}
 
 	template<typename Container>

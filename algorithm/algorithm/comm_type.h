@@ -19,5 +19,4 @@ typedef vector<vector<string>> vvs;
 typedef vector<vector<int>> vvint;
 typedef vector<double> vdouble;
 typedef vector<vector<double>> vvd;
-
 #endif
