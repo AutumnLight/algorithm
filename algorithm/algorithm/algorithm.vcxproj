@@ -151,9 +151,11 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UnionSet.h" />
+    <ClInclude Include="lib.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="algorithm.cpp" />
+    <ClCompile Include="lib.cpp" />
     <ClCompile Include="partition.h" />
     <ClCompile Include="quick_sort.cpp" />
     <ClCompile Include="stdafx.cpp">
